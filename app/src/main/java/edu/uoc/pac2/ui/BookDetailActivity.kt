@@ -29,7 +29,7 @@ class BookDetailActivity : AppCompatActivity() {
             val itemID = intent.getIntExtra(BookDetailFragment.ARG_ITEM_ID, -1)
             val fragment = BookDetailFragment.newInstance(itemID)
             supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayout, fragment)
+                    .add(R.id.item_detail_container, fragment)
                     .commit()
         }
     }

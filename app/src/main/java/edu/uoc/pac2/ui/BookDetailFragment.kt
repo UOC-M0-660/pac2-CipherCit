@@ -1,10 +1,15 @@
 package edu.uoc.pac2.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.google.android.material.appbar.CollapsingToolbarLayout
+import com.squareup.picasso.Picasso
+import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
 
@@ -26,14 +31,31 @@ class BookDetailFragment : Fragment() {
     }
 
 
-    // TODO: Get Book for the given {@param ARG_ITEM_ID} Book id
+    // Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
-        throw NotImplementedError()
+        arguments?.let {
+            val bookId = it.getInt(ARG_ITEM_ID)
+
+            AsyncTask.execute {
+                val book = (activity!!.application as MyApplication).getBooksInteractor().getBookById(bookId)
+                if (book != null){
+                    activity?.runOnUiThread {
+                        initUI(book)
+                    }
+                }
+            }
+        }
     }
 
-    // TODO: Init UI with book details
+    // Init UI with book details
     private fun initUI(book: Book) {
-        throw NotImplementedError()
+        view?.findViewById<TextView>(R.id.item_detail_author)?.text = book.author
+        view?.findViewById<TextView>(R.id.item_detail_date)?.text = book.publicationDate
+        view?.findViewById<TextView>(R.id.item_detail_description)?.text = book.description
+
+        activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = book.title
+
+        Picasso.get().load(book.urlImage).into(view?.findViewById(R.id.item_detail_image))
     }
 
     // TODO: Share Book Title and Image URL

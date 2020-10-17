@@ -95,7 +95,7 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: Load Books from Room
+    // Load Books from Room
     private fun loadBooksFromLocalDb() {
         AsyncTask.execute {
             val books = (application as MyApplication).getBooksInteractor().getAllBooks()
@@ -106,7 +106,7 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: Save Books to Local Storage
+    // Save Books to Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
         AsyncTask.execute {
             (application as MyApplication).getBooksInteractor().saveBooks(books)
