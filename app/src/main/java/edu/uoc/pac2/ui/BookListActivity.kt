@@ -1,10 +1,14 @@
 package edu.uoc.pac2.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
@@ -31,6 +35,9 @@ class BookListActivity : AppCompatActivity() {
         // Get Books
         getBooks()
 
+        // swipe refresh
+        initRefreshBooks()
+
         // TODO: Add books data to Firestore [Use once for new projects with empty Firestore Database]
         // FirestoreBookData.addBooksDataToFirestoreDatabase()
     }
@@ -53,9 +60,31 @@ class BookListActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
     }
 
+    private fun initRefreshBooks() {
+        val swipeRefreshContainer = findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list)
+
+        swipeRefreshContainer.setOnRefreshListener {
+            getBooks()
+        }
+    }
+
     // TODO: Get Books and Update UI
     private fun getBooks() {
+        val firestoreDatabase = Firebase.firestore
+        val docRef = firestoreDatabase.collection("books")
 
+        docRef.get()
+            .addOnSuccessListener { querySnapshot ->
+                val books: List<Book> = querySnapshot.documents.mapNotNull { it.toObject(Book::class.java) }
+                adapter = BooksListAdapter(books)
+                findViewById<RecyclerView>(R.id.book_list).adapter = adapter
+                findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+
+                findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
+            }
     }
 
     // TODO: Load Books from Room
