@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "101277106432",
+    "firebase_url": "https://pec2-cipherc.firebaseio.com",
+    "project_id": "pec2-cipherc",
+    "storage_bucket": "pec2-cipherc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101277106432:android:247df713955e18759c73e5",
+        "android_client_info": {
+          "package_name": "edu.uoc.pac2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101277106432-ob9s11echasn90sp8e9forto5jqjkld7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAt8yXoEjThBY9puM-cEv23Utt6l1DU-sY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101277106432-ob9s11echasn90sp8e9forto5jqjkld7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
