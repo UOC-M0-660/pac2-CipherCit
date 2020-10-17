@@ -1,5 +1,6 @@
 package edu.uoc.pac2.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +13,6 @@ import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
-import edu.uoc.pac2.data.BooksInteractor
-import edu.uoc.pac2.data.FirestoreBookData
 
 /**
  * An activity representing a list of Books.
@@ -38,7 +37,7 @@ class BookListActivity : AppCompatActivity() {
         // swipe refresh
         initRefreshBooks()
 
-        // TODO: Add books data to Firestore [Use once for new projects with empty Firestore Database]
+        // Add books data to Firestore [Use once for new projects with empty Firestore Database]
         // FirestoreBookData.addBooksDataToFirestoreDatabase()
     }
 
@@ -70,30 +69,47 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
-        val firestoreDatabase = Firebase.firestore
-        val docRef = firestoreDatabase.collection("books")
+        loadBooksFromLocalDb()
 
-        docRef.get()
-            .addOnSuccessListener { querySnapshot ->
-                val books: List<Book> = querySnapshot.documents.mapNotNull { it.toObject(Book::class.java) }
-                adapter = BooksListAdapter(books)
-                findViewById<RecyclerView>(R.id.book_list).adapter = adapter
-                findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
+        if ((application as MyApplication).hasInternetConnection()){
+            val firestoreDatabase = Firebase.firestore
+            val docRef = firestoreDatabase.collection("books")
 
-                findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
-            }
+            docRef.get()
+                .addOnSuccessListener { querySnapshot ->
+                    val books: List<Book> = querySnapshot.documents.mapNotNull { it.toObject(Book::class.java) }
+
+                    saveBooksToLocalDatabase(books)
+
+                    adapter = BooksListAdapter(books)
+                    findViewById<RecyclerView>(R.id.book_list).adapter = adapter
+                    findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
+                }
+                .addOnFailureListener { exception ->
+                    Log.d(TAG, "get failed with ", exception)
+
+                    findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
+                }
+        } else {
+            findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
+        }
     }
 
     // TODO: Load Books from Room
     private fun loadBooksFromLocalDb() {
-        throw NotImplementedError()
+        AsyncTask.execute {
+            val books = (application as MyApplication).getBooksInteractor().getAllBooks()
+            runOnUiThread {
+                adapter = BooksListAdapter(books)
+                findViewById<RecyclerView>(R.id.book_list).adapter = adapter
+            }
+        }
     }
 
     // TODO: Save Books to Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
-        throw NotImplementedError()
+        AsyncTask.execute {
+            (application as MyApplication).getBooksInteractor().saveBooks(books)
+        }
     }
 }
