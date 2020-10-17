@@ -1,5 +1,6 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
@@ -55,7 +56,13 @@ class BookListActivity : AppCompatActivity() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = layoutManager
         // Init Adapter
-        adapter = BooksListAdapter(emptyList())
+        adapter = BooksListAdapter(emptyList()) { book ->
+            val intent = Intent(this, BookDetailActivity::class.java).apply {
+                putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
+            }
+            startActivity(intent)
+        }
+
         recyclerView.adapter = adapter
     }
 
@@ -67,7 +74,7 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: Get Books and Update UI
+    // Get Books and Update UI
     private fun getBooks() {
         loadBooksFromLocalDb()
 
@@ -81,8 +88,7 @@ class BookListActivity : AppCompatActivity() {
 
                     saveBooksToLocalDatabase(books)
 
-                    adapter = BooksListAdapter(books)
-                    findViewById<RecyclerView>(R.id.book_list).adapter = adapter
+                    adapter.setBooks(books)
                     findViewById<SwipeRefreshLayout>(R.id.swipe_refresh_book_list).isRefreshing = false
                 }
                 .addOnFailureListener { exception ->
@@ -99,10 +105,7 @@ class BookListActivity : AppCompatActivity() {
     private fun loadBooksFromLocalDb() {
         AsyncTask.execute {
             val books = (application as MyApplication).getBooksInteractor().getAllBooks()
-            runOnUiThread {
-                adapter = BooksListAdapter(books)
-                findViewById<RecyclerView>(R.id.book_list).adapter = adapter
-            }
+            adapter.setBooks(books)
         }
     }
 

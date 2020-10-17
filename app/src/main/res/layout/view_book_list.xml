@@ -11,8 +11,8 @@
     android:name="edu.uoc.pac1.BookListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:layout_marginLeft="@dimen/text_margin"
+    android:layout_marginRight="@dimen/text_margin"
     tools:context="edu.uoc.pac2.ui.BookListActivity"
     tools:listitem="@layout/row_book_list_content_even" />
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

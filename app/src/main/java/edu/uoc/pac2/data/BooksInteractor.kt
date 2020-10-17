@@ -1,7 +1,5 @@
 package edu.uoc.pac2.data
 
-import android.util.Log
-
 /**
  * This class Interacts with {@param bookDao} to perform operations in the local database.
  *
