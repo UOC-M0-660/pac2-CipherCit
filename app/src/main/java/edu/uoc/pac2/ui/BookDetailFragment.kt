@@ -61,7 +61,8 @@ class BookDetailFragment : Fragment() {
 
         activity?.findViewById<CollapsingToolbarLayout>(R.id.toolbar_layout)?.title = book.title
 
-        Picasso.get().load(book.urlImage).into(view?.findViewById(R.id.item_detail_image))
+        //Picasso.get().load(book.urlImage).into(view?.findViewById(R.id.item_detail_image))
+        Picasso.get().load(book.urlImage).into(activity?.findViewById(R.id.toolbar_image))
     }
 
     // Share Book Title and Image URL
