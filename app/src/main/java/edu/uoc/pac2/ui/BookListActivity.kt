@@ -9,11 +9,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.gms.ads.AdRequest
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
+import kotlinx.android.synthetic.main.activity_book_list.*
 
 /**
  * An activity representing a list of Books.
@@ -40,6 +42,9 @@ class BookListActivity : AppCompatActivity() {
 
         // Add books data to Firestore [Use once for new projects with empty Firestore Database]
         // FirestoreBookData.addBooksDataToFirestoreDatabase()
+
+        // load Ad
+        adView.loadAd(AdRequest.Builder().build())
     }
 
     // Init Top Toolbar

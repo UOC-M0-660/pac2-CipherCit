@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.room.Room
+import com.google.android.gms.ads.MobileAds
 import edu.uoc.pac2.data.*
 
 /**
@@ -21,6 +22,8 @@ class MyApplication : Application() {
         val db = Room.databaseBuilder(applicationContext, ApplicationDatabase::class.java, "booksDatabase").build()
         // Init BooksInteractor
         booksInteractor = BooksInteractor(db.bookDao())
+
+        MobileAds.initialize(applicationContext)
     }
 
     fun getBooksInteractor(): BooksInteractor {

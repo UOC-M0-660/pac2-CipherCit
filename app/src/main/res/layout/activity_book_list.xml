@@ -29,4 +29,12 @@
         <include layout="@layout/view_book_list" />
     </FrameLayout>
 
+    <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:adSize="BANNER"
+      android:layout_gravity="bottom"
+      app:adUnitId="@string/banner_prod_id" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

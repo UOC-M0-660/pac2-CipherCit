@@ -55,5 +55,4 @@ class BookDetailActivity : AppCompatActivity() {
         super.onBackPressed()
         overridePendingTransition(R.anim.translate_in_top, R.anim.translate_out_top)
     }
-
 }
