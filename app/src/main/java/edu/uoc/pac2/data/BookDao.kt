@@ -1,8 +1,6 @@
 package edu.uoc.pac2.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 /**
  * Book Dao (Data Access Object) for accessing Book Table functions.
@@ -19,9 +17,9 @@ interface BookDao {
     @Query("SELECT * FROM Book where title LIKE :titleBook")
     fun getBookByTitle(titleBook: String): Book?
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     fun saveBook(book: Book): Long
 
-    @Query("DELETE FROM Book")
-    fun deleteAllBooks()
+    @Update
+    fun updateBook(book: Book)
 }
