@@ -10,24 +10,35 @@ package edu.uoc.pac2.data
  */
 class BooksInteractor(private val bookDao: BookDao) {
 
-    // TODO: Get All Books from DAO
+    // Get All Books from DAO
     fun getAllBooks(): List<Book> {
         return bookDao.getAllBooks()
     }
 
-    // TODO: Save Book
+    // Save Book
     fun saveBook(book: Book) {
         bookDao.saveBook(book)
     }
 
-    // TODO: Save List of Books
+    // Save List of Books
     fun saveBooks(books: List<Book>) {
-        books.forEach { saveBook(it) }
+        val allBookIds = getAllBooks().map { it.uid }
+
+        books.forEach {
+            if (allBookIds.contains(it.uid)) {
+                updateBook(it)
+            } else {
+                saveBook(it)
+            }
+        }
     }
 
-    // TODO: Get Book by id
+    // Get Book by id
     fun getBookById(id: Int): Book? {
         return bookDao.getBookById(id)
     }
 
+    fun updateBook(book: Book) {
+        bookDao.updateBook(book)
+    }
 }

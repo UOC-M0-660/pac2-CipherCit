@@ -12,7 +12,12 @@ class BookDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_out_bottom)
+
         setContentView(R.layout.activity_book_detail)
+        setSupportActionBar(findViewById(R.id.detail_toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
@@ -29,19 +34,25 @@ class BookDetailActivity : AppCompatActivity() {
             val itemID = intent.getIntExtra(BookDetailFragment.ARG_ITEM_ID, -1)
             val fragment = BookDetailFragment.newInstance(itemID)
             supportFragmentManager.beginTransaction()
-                    .add(R.id.frameLayout, fragment)
+                    .add(R.id.item_detail_container, fragment)
                     .commit()
         }
     }
 
     // TODO: Override finish animation for actionbar back arrow
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+
+        if (item.itemId == android.R.id.home) {
+            finish()
+            overridePendingTransition(R.anim.translate_in_top, R.anim.translate_out_top)
+            return true
+        }
+
+        return false
     }
 
-    // TODO: Override finish animation for phone back button
     override fun onBackPressed() {
         super.onBackPressed()
+        overridePendingTransition(R.anim.translate_in_top, R.anim.translate_out_top)
     }
-
 }
